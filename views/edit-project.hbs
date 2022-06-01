@@ -66,8 +66,7 @@
                   class="form-control"
                   id="projectName"
                   name="projectName"
-                  placeholder="Enter your project"
-                  value="{{edit.projectName}}"
+                  value="{{edit.name}}"
                   required
                 />
               </div>
@@ -79,7 +78,7 @@
                     id="startDate"
                     name="startDate"
                     class="form-control"
-                    value="{{edit.startDate}}"
+                    value="{{edit.start_date}}"
                   />
                 </div>
                 <div class="col">
@@ -89,7 +88,7 @@
                     id="endDate"
                     name="endDate"
                     class="form-control"
-                    value="{{edit.endDate}}"
+                    value="{{edit.end_date}}"
                   />
                 </div>
               </div>
@@ -112,9 +111,9 @@
                       <input
                         class="form-check-input"
                         type="checkbox"
-                        value="public/img/nodejs-icon.svg"
                         id="nodeJs"
                         name="nodeJs"
+                        {{#if edit.technologies.[0]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="nodeJs">
                         Node JS
@@ -124,9 +123,9 @@
                       <input
                         class="form-check-input"
                         type="checkbox"
-                        value="public/img/react.svg"
                         id="reactJs"
                         name="reactJs"
+                        {{#if edit.technologies.[1]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="reactJs">
                         React JS
@@ -138,9 +137,9 @@
                       <input
                         class="form-check-input"
                         type="checkbox"
-                        value="public/img/nextjs-icon.svg"
                         id="nextJs"
                         name="nextJs"
+                        {{#if edit.technologies.[2]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="nextJs">
                         Next JS
@@ -150,9 +149,9 @@
                       <input
                         class="form-check-input"
                         type="checkbox"
-                        value="public/img/typescript-icon.svg"
                         id="typeScript"
                         name="typeScript"
+                        {{#if edit.technologies.[3]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="typeScript">
                         TypeScript
@@ -163,13 +162,13 @@
               </div>
               <div class="form-group">
                 <div class="mb-3">
-                  <label for="projectImage" class="form-label my-lg-2">Upload
-                    Image</label>
+                  <label for="image" class="form-label my-lg-2">Upload Image</label>
+                  {{!-- <img src="/public/assets/{{ edit.image }}" alt=""> --}}
                   <input
                     class="form-control"
                     type="file"
-                    id="projectImage"
-                    name="projectImage"
+                    id="image"
+                    name="image"
                   />
                 </div>
               </div>

@@ -25,15 +25,13 @@ app.get("/", function (req, res) {
       const projects = result.rows;
 
       const newProject = projects.map((project) => {
-        return {
-          ...project,
-          startDate: converTime(project.start_date),
-          endDate: converTime(project.end_date),
-          lengthDate: getDateDifference(project.start_date, project.end_date),
-        };
+        project.lengthDate = getDateDifference(
+          project["start_date"],
+          project["end_date"]
+        );
       });
 
-      res.render("index", { projects: newProject });
+      res.render("index", { projects });
     });
     done();
   });
@@ -44,34 +42,105 @@ app.get("/add-project", function (req, res) {
 });
 
 app.post("/add-project", function (req, res) {
-  const data = req.body;
+  const name = req.body.name;
+  const start_date = req.body.startDate;
+  const end_date = req.body.endDate;
+  const description = req.body.description;
+  const technologies = [];
+  const image = req.body.image;
 
-  console.log(data);
+  if (req.body.nodeJs) {
+    technologies.push("nodejs");
+  } else {
+    technologies.push("");
+  }
+  if (req.body.reactJs) {
+    technologies.push("reactjs");
+  } else {
+    technologies.push("");
+  }
+  if (req.body.nextJs) {
+    technologies.push("nextJs");
+  } else {
+    technologies.push("");
+  }
+  if (req.body.typeScript) {
+    technologies.push("typeScript");
+  } else {
+    technologies.push("");
+  }
 
-  data.lengthDate = getDateDifference(data["startDate"], data["endDate"]);
-  data["startDate"] = converTime(data["startDate"]);
-  data["endDate"] = converTime(data["endDate"]);
+  db.connect(function (err, client, done) {
+    if (err) throw err;
 
-  projects.push(data);
-  res.redirect("/");
+    const query = `INSERT INTO tb_projects (name, start_date, end_date, description, technologies, image) 
+                   VALUES ('${name}', '${start_date}', '${end_date}', '${description}', ARRAY ['${technologies[0]}', '${technologies[1]}','${technologies[2]}', '${technologies[3]}'], '${image}')`;
+
+    client.query(query, function (err, result) {
+      if (err) throw err;
+
+      res.redirect("/");
+    });
+    done();
+  });
 });
 
-app.get("/project-detail/:index", function (req, res) {
-  const index = req.params.index;
-  const project = projects[index];
+app.get("/project-detail/:id", function (req, res) {
+  const id = req.params.id;
 
-  res.render("project-detail", { isLogin: isLogin, project });
+  db.connect(function (err, client, done) {
+    if (err) throw err;
+
+    const query = `SELECT * FROM tb_projects WHERE id = ${id}`;
+
+    client.query(query, function (err, result) {
+      if (err) throw err;
+
+      const project = result.rows[0];
+
+      project.lengthDate = getDateDifference(
+        project["start_date"],
+        project["end_date"]
+      );
+      project["start_date"] = converTime(project["start_date"]);
+      project["end_date"] = converTime(project["end_date"]);
+
+      res.render("project-detail", { project });
+    });
+    done();
+  });
+
+  return;
 });
 
 app.get("/contact", function (req, res) {
-  res.render("contact", { isLogin: isLogin });
+  res.render("contact");
 });
 
-app.get("/edit-project/:index", function (req, res) {
-  const index = req.params.index;
-  const edit = projects[index];
+app.get("/edit-project/:id", function (req, res) {
+  const id = req.params.id;
 
-  res.render("edit-project", { isLogin: isLogin, edit, id: index });
+  db.connect(function (err, client, done) {
+    if (err) throw err;
+
+    const query = `SELECT * FROM tb_projects WHERE id = ${id};`;
+
+    client.query(query, function (err, result) {
+      if (err) throw err;
+
+      const project = result.rows[0];
+
+      // project.start_date = getFullTime(project["start_date"]);
+      // project.end_date = getFullTime(project["end_date"]);
+
+      res.render("edit-project", {
+        name: project.name,
+        edit: project,
+        id: project.id,
+      });
+    });
+    done();
+  });
 });
 
 app.post("/edit-project/:index", function (req, res) {
@@ -89,16 +158,32 @@ app.post("/edit-project/:index", function (req, res) {
   res.redirect("/");
 });
 
-app.get("/delete-project/:index", (req, res) => {
-  const index = req.params.index;
-  projects.splice(index, 1);
+app.get("/delete-project/:id", (req, res) => {
+  const id = req.params.id;
 
-  res.redirect("/");
+  db.connect(function (err, client, done) {
+    if (err) throw err;
+
+    const query = `DELETE FROM tb_projects WHERE id = ${id}`;
+
+    client.query(query, function (err, result) {
+      if (err) throw err;
+
+      res.redirect("/");
+    });
+    done();
+  });
 });
 
 app.listen(port, function () {
   console.log(`Server running on port: ${port}`);
 });
+
+function getFullTime(time) {
+  time = new Date(time);
+
+  return time;
+}
 
 function getDateDifference(startDate, endDate) {
   startDate = new Date(startDate);

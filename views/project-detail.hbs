@@ -45,11 +45,9 @@
                 href="/"
               >Home</a>
             </li>
-            {{#isLogin}}
-              <li class="nav-item ms-lg-3">
-                <a class="nav-link" href="add-project">Add Project</a>
-              </li>
-            {{/isLogin}}
+            <li class="nav-item ms-lg-3">
+              <a class="nav-link" href="add-project">Add Project</a>
+            </li>
           </ul>
           <a class="btn btn-dark" href="contact"> Contact Me </a>
         </div>
@@ -57,7 +55,7 @@
     </nav>
     <main>
       <section class="container" id="detail-project">
-        <h1 class="text-center my-5">{{project.projectName}}</h1>
+        <h1 class="text-center my-5">{{project.name}}</h1>
         <div class="row">
           <div class="col-8">
             <img class="img-fluid" src="/public/img/cover.png" />
@@ -72,9 +70,9 @@
               </p>
               <p>
                 <span class="me-2"><i class="bi bi-clock-fill"></i></span>
-                {{project.startDate}}
+                {{project.start_date}}
                 -
-                {{project.endDate}}
+                {{project.end_date}}
               </p>
             </div>
             <div class="technology">

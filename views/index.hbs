@@ -44,11 +44,9 @@
                 href="/"
               >Home</a>
             </li>
-            {{#isLogin}}
-              <li class="nav-item ms-lg-3">
-                <a class="nav-link text-dark" href="add-project">Add Project</a>
-              </li>
-            {{/isLogin}}
+            <li class="nav-item ms-lg-3">
+              <a class="nav-link text-dark" href="add-project">Add Project</a>
+            </li>
           </ul>
           <a class="btn btn-dark" href="contact"> Contact Me </a>
         </div>
@@ -154,7 +152,8 @@
                 <div class="card-body">
                   <h5 class="card-title"><a
                       class="text-decoration-none text-dark"
-                      href="/project-detail/{{@index}}"
+                      href="/project-detail/{{this.id}}"
+                      target="_blank"
                     >
                       {{this.name}}
                     </a></h5>
@@ -172,12 +171,12 @@
 
                   <div class="d-flex">
                     <a
-                      href="/edit-project/{{@index}}"
+                      href="/edit-project/{{this.id}}"
                       class="btn btn-primary w-100 me-3"
                       type="submit"
                     >Edit</a>
                     <a
-                      href="/delete-project/{{@index}}"
+                      href="/delete-project/{{this.id}}"
                       class="btn btn-primary w-100"
                       type="submit"
                     >Delete</a>
